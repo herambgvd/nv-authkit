@@ -1,4 +1,4 @@
-# AuthKit System
+### AuthKit System
 
 A production-ready, modular user management system built with FastAPI, PostgreSQL, and async support. This system provides comprehensive user authentication, authorization, and management features suitable for enterprise applications.
 
@@ -7,10 +7,20 @@ A production-ready, modular user management system built with FastAPI, PostgreSQ
 ### Core Features
 - **User Registration & Authentication** - Secure user registration with email verification
 - **JWT Token Management** - Access and refresh token handling
+- **Role-Based Access Control (RBAC)** - Comprehensive permission and role system
 - **Password Management** - Secure password hashing, reset, and change functionality
 - **Email Verification** - Email-based account verification system
 - **User Profiles** - Comprehensive user profile management
 - **Admin Panel** - Full administrative controls for user management
+- **Permission System** - Granular permission control for microservices
+
+### RBAC Features
+- **Roles & Permissions** - Hierarchical role system with granular permissions
+- **Resource-Based Permissions** - Permissions tied to specific resources and actions
+- **Role Assignment** - Bulk role assignment and management
+- **Permission Checking** - Runtime permission validation
+- **Microservice Ready** - Permission system designed for microservice architecture
+- **Default Roles** - Pre-configured roles (admin, user_manager, moderator, user, guest)
 
 ### Security Features
 - **Async PostgreSQL** - High-performance async database operations
@@ -91,6 +101,9 @@ pip install -r requirements-dev.txt
 # Initialize database
 python scripts/init_db.py
 
+# Initialize RBAC system
+python scripts/init_rbac.py
+
 # Run migrations
 alembic upgrade head
 
@@ -152,7 +165,24 @@ curl http://localhost:8000/health
 | POST | `/api/v1/auth/change-password` | Change password |
 | GET | `/api/v1/auth/me` | Get current user |
 
-### User Management Endpoints
+### Role & Permission Management Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/v1/roles/permissions` | Create permission (Admin) |
+| GET | `/api/v1/roles/permissions` | List permissions (Admin) |
+| GET | `/api/v1/roles/permissions/{id}` | Get permission by ID (Admin) |
+| PUT | `/api/v1/roles/permissions/{id}` | Update permission (Admin) |
+| DELETE | `/api/v1/roles/permissions/{id}` | Delete permission (Admin) |
+| POST | `/api/v1/roles/` | Create role (Admin) |
+| GET | `/api/v1/roles/` | List roles (Admin) |
+| GET | `/api/v1/roles/{id}` | Get role by ID (Admin) |
+| PUT | `/api/v1/roles/{id}` | Update role (Admin) |
+| DELETE | `/api/v1/roles/{id}` | Delete role (Admin) |
+| POST | `/api/v1/roles/assign` | Assign roles to user (Admin) |
+| POST | `/api/v1/roles/bulk-assign` | Bulk assign roles (Admin) |
+| POST | `/api/v1/roles/check-permission` | Check user permission (Admin) |
+| GET | `/api/v1/roles/stats/overview` | Get role statistics (Admin) |
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
@@ -174,40 +204,6 @@ curl http://localhost:8000/health
 | GET | `/health/ready` | Readiness probe |
 | GET | `/health/live` | Liveness probe |
 
-## 🏗️ Project Structure
-
-```
-fastapi-user-management/
-├── app/
-│   ├── api/                    # API route handlers
-│   │   ├── auth.py            # Authentication endpoints
-│   │   ├── users.py           # User management endpoints
-│   │   └── health.py          # Health check endpoints
-│   ├── core/                  # Core functionality
-│   │   ├── config.py          # Configuration settings
-│   │   ├── database.py        # Database connection
-│   │   ├── security.py        # Security utilities
-│   │   └── exceptions.py      # Custom exceptions
-│   ├── models/                # SQLAlchemy models
-│   │   ├── base.py            # Base model class
-│   │   └── user.py            # User model
-│   ├── schemas/               # Pydantic schemas
-│   │   ├── auth.py            # Authentication schemas
-│   │   └── user.py            # User schemas
-│   ├── services/              # Business logic layer
-│   │   ├── auth_service.py    # Authentication service
-│   │   ├── user_service.py    # User service
-│   │   └── email_service.py   # Email service
-│   ├── dependencies/          # FastAPI dependencies
-│   │   └── auth.py            # Authentication dependencies
-│   ├── utils/                 # Utility functions
-│   └── main.py                # FastAPI application
-├── migrations/                # Alembic migrations
-├── scripts/                   # Utility scripts
-├── tests/                     # Test suite
-├── docker/                    # Docker configuration
-└── requirements.txt           # Python dependencies
-```
 
 ## 🔧 Configuration
 

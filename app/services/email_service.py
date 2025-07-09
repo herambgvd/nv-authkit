@@ -43,9 +43,14 @@ class EmailService:
             autoescape=True
         )
 
-    async def send_email(self,
-                         recipients: List[str], subject: str, template_name: str, template_data: Dict[str, Any],
-                         attachments: List[str] = None) -> bool:
+    async def send_email(
+            self,
+            recipients: List[str],
+            subject: str,
+            template_name: str,
+            template_data: Dict[str, Any],
+            attachments: List[str] = None
+    ) -> bool:
         """Send email using template."""
         try:
             # Render template

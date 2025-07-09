@@ -120,6 +120,8 @@ class UserResponse(UserInDB):
     """User response schema."""
     full_name: str = Field(..., description="User full name")
     display_name: str = Field(..., description="User display name")
+    roles: List[str] = Field(default=[], description="User role names")
+    permissions: List[str] = Field(default=[], description="User permission codenames")
 
     class Config:
         json_schema_extra = {
@@ -139,7 +141,9 @@ class UserResponse(UserInDB):
                 "updated_at": "2023-01-02T00:00:00Z",
                 "last_login": "2023-01-02T10:30:00Z",
                 "full_name": "John Doe",
-                "display_name": "johndoe"
+                "display_name": "johndoe",
+                "roles": ["user", "editor"],
+                "permissions": ["profile.view_own", "profile.update_own"]
             }
         }
 

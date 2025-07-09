@@ -14,6 +14,7 @@ from app.core.database import init_db, close_db, check_db_health
 from app.core.exceptions import UserManagementException
 from app.api.auth import router as auth_router
 from app.api.users import router as users_router
+from app.api.roles import router as roles_router
 from app.api.health import router as health_router
 
 # Configure logging
@@ -118,6 +119,7 @@ async def general_exception_handler(request: Request, exc: Exception):
 app.include_router(health_router)
 app.include_router(auth_router, prefix=settings.app.api_prefix)
 app.include_router(users_router, prefix=settings.app.api_prefix)
+app.include_router(roles_router, prefix=settings.app.api_prefix)
 
 
 @app.get("/", tags=["Root"])

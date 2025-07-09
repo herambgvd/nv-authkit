@@ -1,23 +1,21 @@
 """
 User service for business logic operations.
 """
-from datetime import datetime
-from typing import Optional, List, Dict, Any
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, and_, or_
-from sqlalchemy.orm import selectinload
 import uuid
+from datetime import datetime
+from typing import Optional, Dict, Any
 
-from app.models.user import User
-from app.schemas.user import UserCreate, UserUpdate, UserAdminUpdate
-from app.core.security import security_manager
+from sqlalchemy import select, func, and_, or_
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.core.exceptions import (
     UserNotFoundException,
     UserAlreadyExistsException,
-    InvalidCredentialsException,
-    EmailNotVerifiedException,
-    ValidationException
+    InvalidCredentialsException
 )
+from app.core.security import security_manager
+from app.models.user import User
+from app.schemas.user import UserCreate, UserUpdate, UserAdminUpdate
 
 
 class UserService:
@@ -55,6 +53,14 @@ class UserService:
             is_superuser=user_data.is_superuser,
             verification_token=verification_token
         )
+
+        # Assign default role to new users (unless they're superusers)
+        if not user_data.is_superuser:
+            from app.services.role_service import RoleService
+            role_service = RoleService(self.db)
+            default_role = await role_service.get_default_role()
+            if default_role:
+                db_user.roles = [default_role]
 
         self.db.add(db_user)
         await self.db.commit()
