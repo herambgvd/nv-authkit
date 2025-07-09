@@ -2,11 +2,10 @@
 Email service for sending notifications and verification emails.
 """
 import logging
-from pathlib import Path
 from typing import Dict, Any, List
-
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 from jinja2 import Environment, FileSystemLoader
+from pathlib import Path
 
 from app.core.config import settings
 from app.core.exceptions import EmailServiceException
@@ -44,12 +43,12 @@ class EmailService:
         )
 
     async def send_email(
-            self,
-            recipients: List[str],
-            subject: str,
-            template_name: str,
-            template_data: Dict[str, Any],
-            attachments: List[str] = None
+        self,
+        recipients: List[str],
+        subject: str,
+        template_name: str,
+        template_data: Dict[str, Any],
+        attachments: List[str] = None
     ) -> bool:
         """Send email using template."""
         try:
@@ -143,6 +142,101 @@ class EmailService:
             template_data=template_data
         )
 
+    async def send_role_assigned_email(self, email: str, name: str, role_name: str, permissions: list = None, assigned_by: str = None) -> bool:
+        """Send role assignment notification email."""
+        template_data = {
+            "name": name,
+            "role_name": role_name,
+            "permissions": permissions or [],
+            "assigned_by": assigned_by or "System Administrator",
+            "assigned_date": datetime.now().strftime("%B %d, %Y at %I:%M %p"),
+            "app_name": settings.app.name,
+            "frontend_url": settings.app.frontend_url,
+            "support_email": settings.email.from_email
+        }
+
+        return await self.send_email(
+            recipients=[email],
+            subject=f"New Role Assigned - {settings.app.name}",
+            template_name="role_assigned",
+            template_data=template_data
+        )
+
+    async def send_login_alert_email(self, email: str, name: str, login_details: dict) -> bool:
+        """Send login alert notification email."""
+        template_data = {
+            "name": name,
+            "login_time": login_details.get("time", "Unknown"),
+            "ip_address": login_details.get("ip", "Unknown"),
+            "location": login_details.get("location", "Unknown"),
+            "device_info": login_details.get("device", "Unknown"),
+            "browser_info": login_details.get("browser", "Unknown"),
+            "is_suspicious": login_details.get("suspicious", False),
+            "recent_logins": login_details.get("recent_logins", []),
+            "app_name": settings.app.name,
+            "frontend_url": settings.app.frontend_url,
+            "support_email": settings.email.from_email
+        }
+
+        subject = "🚨 Suspicious Login Alert" if login_details.get("suspicious") else "New Login Alert"
+
+        return await self.send_email(
+            recipients=[email],
+            subject=f"{subject} - {settings.app.name}",
+            template_name="login_alert",
+            template_data=template_data
+        )
+
+    async def send_data_export_email(self, email: str, name: str, export_details: dict) -> bool:
+        """Send data export ready notification email."""
+        template_data = {
+            "name": name,
+            "download_url": export_details.get("download_url"),
+            "request_date": export_details.get("request_date"),
+            "completion_date": export_details.get("completion_date"),
+            "file_format": export_details.get("file_format", "ZIP"),
+            "file_size": export_details.get("file_size", "Unknown"),
+            "expiry_date": export_details.get("expiry_date"),
+            "expiry_hours": export_details.get("expiry_hours", 48),
+            "app_name": settings.app.name,
+            "frontend_url": settings.app.frontend_url,
+            "support_email": settings.email.from_email
+        }
+
+        return await self.send_email(
+            recipients=[email],
+            subject=f"Your Data Export is Ready - {settings.app.name}",
+            template_name="data_export",
+            template_data=template_data
+        )
+
+    async def send_newsletter_email(self, email: str, name: str, newsletter_data: dict) -> bool:
+        """Send newsletter email."""
+        template_data = {
+            "name": name,
+            "newsletter_title": newsletter_data.get("title", "Newsletter"),
+            "newsletter_subtitle": newsletter_data.get("subtitle"),
+            "newsletter_intro": newsletter_data.get("intro"),
+            "featured_content": newsletter_data.get("featured_content"),
+            "primary_cta": newsletter_data.get("primary_cta"),
+            "news_items": newsletter_data.get("news_items", []),
+            "product_updates": newsletter_data.get("product_updates", []),
+            "community_highlights": newsletter_data.get("community_highlights", []),
+            "tips_section": newsletter_data.get("tips_section"),
+            "upcoming_events": newsletter_data.get("upcoming_events", []),
+            "stats_section": newsletter_data.get("stats_section", []),
+            "unsubscribe_url": f"{settings.app.frontend_url}/unsubscribe?email={email}",
+            "app_name": settings.app.name,
+            "frontend_url": settings.app.frontend_url
+        }
+
+        return await self.send_email(
+            recipients=[email],
+            subject=newsletter_data.get("subject", f"Newsletter - {settings.app.name}"),
+            template_name="newsletter",
+            template_data=template_data
+        )
+
     async def send_account_locked_email(self, email: str, name: str) -> bool:
         """Send account locked notification email."""
         template_data = {
@@ -158,7 +252,6 @@ class EmailService:
             template_name="account_locked",
             template_data=template_data
         )
-
 
 # Global email service instance
 email_service = EmailService()

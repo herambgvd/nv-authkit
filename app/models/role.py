@@ -3,12 +3,13 @@ Role and Permission models for RBAC system.
 """
 from datetime import datetime
 from typing import Optional, List
-from sqlalchemy import String, Boolean, Text, Table, Column, ForeignKey, Index
+from sqlalchemy import String, Boolean, Text, Table, Column, ForeignKey, Index, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
 from app.core.database import Base
+
 
 # Association table for role-permission many-to-many relationship
 role_permissions = Table(
@@ -87,12 +88,12 @@ class Permission(Base):
     # Timestamps
     created_at: Mapped[datetime] = mapped_column(
         nullable=False,
-        default=datetime.utcnow
+        server_default=func.now()
     )
 
     updated_at: Mapped[Optional[datetime]] = mapped_column(
         nullable=True,
-        onupdate=datetime.utcnow
+        onupdate=func.now()
     )
 
     # Relationships
@@ -166,12 +167,12 @@ class Role(Base):
     # Timestamps
     created_at: Mapped[datetime] = mapped_column(
         nullable=False,
-        default=datetime.utcnow
+        server_default=func.now()
     )
 
     updated_at: Mapped[Optional[datetime]] = mapped_column(
         nullable=True,
-        onupdate=datetime.utcnow
+        onupdate=func.now()
     )
 
     # Relationships

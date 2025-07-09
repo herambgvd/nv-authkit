@@ -189,8 +189,7 @@ class RoleService:
 
     async def get_roles(self, skip: int = 0, limit: int = 100,
                         search: Optional[str] = None, is_active: Optional[bool] = None,
-                        is_default: Optional[bool] = None,
-                        is_system: Optional[bool] = None) -> Dict[str, Any]:
+                        is_default: Optional[bool] = None, is_system: Optional[bool] = None) -> Dict[str, Any]:
         """Get roles with filters and pagination."""
         query = select(Role).options(selectinload(Role.permissions))
 
@@ -418,8 +417,8 @@ class RoleService:
             "granted_by_roles": granted_by_roles
         }
 
-    async def bulk_assign_roles(self, user_ids: List[uuid.UUID], role_ids: List[uuid.UUID],
-                                operation: str) -> Dict[str, Any]:
+    async def bulk_assign_roles(self, user_ids: List[uuid.UUID], role_ids: List[uuid.UUID], operation: str) -> Dict[
+        str, Any]:
         """Bulk assign/remove roles to/from multiple users."""
         results = {"success": [], "failed": []}
 

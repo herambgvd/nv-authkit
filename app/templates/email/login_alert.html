@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}New Login Alert - {{ app_name }}{% endblock %}
+
+{% block header_subtitle %}Security Notification{% endblock %}
+
+{% block content %}
+<p>We detected a new login to your {{ app_name }} account and wanted to notify you for security purposes.</p>
+
+<div class="info-box">
+    <strong>🔐 Login Details:</strong><br>
+    <strong>Date & Time:</strong> {{ login_time }}<br>
+    <strong>IP Address:</strong> {{ ip_address }}<br>
+    <strong>Location:</strong> {{ location }}<br>
+    <strong>Device:</strong> {{ device_info }}<br>
+    <strong>Browser:</strong> {{ browser_info }}
+</div>
+
+<p>If this was you, no further action is required.</p>
+{% endblock %}
+
+{% block action_button %}
+{% if is_suspicious %}
+<div class="button-container">
+    <a href="{{ frontend_url }}/security/review" class="btn btn-danger">Secure My Account</a>
+</div>
+{% else %}
+<div class="button-container">
+    <a href="{{ frontend_url }}/account/security" class="btn">Review Account Security</a>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block additional_content %}
+{% if is_suspicious %}
+<div class="warning-box">
+    <strong>⚠️ Suspicious Activity Detected:</strong><br>
+    This login appears to be from an unusual location or device. If this wasn't you, please take immediate action to secure your account.
+</div>
+
+<p><strong>🚨 If this wasn't you, please:</strong></p>
+<ol style="margin-left: 20px; margin-bottom: 20px;">
+    <li><strong>Change your password immediately</strong> - Use a strong, unique password</li>
+    <li><strong>Review your account activity</strong> - Check for any unauthorized changes</li>
+    <li><strong>Enable two-factor authentication</strong> - Add an extra layer of security</li>
+    <li><strong>Contact our support team</strong> - Report the unauthorized access</li>
+    <li><strong>Check your email security</strong> - Ensure your email account is secure</li>
+</ol>
+{% else %}
+<div class="success-box">
+    <strong>✅ Login Appears Normal:</strong><br>
+    This login matches your typical usage patterns. This notification is sent as a standard security measure.
+</div>
+{% endif %}
+
+<p><strong>🛡️ Account Security Tips:</strong></p>
+<ul style="margin-left: 20px; margin-bottom: 20px;">
+    <li><strong>Use strong passwords:</strong> Create unique passwords with a mix of characters</li>
+    <li><strong>Enable 2FA:</strong> Add two-factor authentication for extra security</li>
+    <li><strong>Regular monitoring:</strong> Review your account activity regularly</li>
+    <li><strong>Secure networks:</strong> Avoid logging in from public Wi-Fi when possible</li>
+    <li><strong>Keep devices updated:</strong> Ensure your devices have the latest security updates</li>
+</ul>
+
+<div class="info-box">
+    <strong>📱 Manage Login Notifications:</strong><br>
+    You can customize your security notification preferences in your account settings. Choose which types of login alerts you'd like to receive.
+</div>
+
+<p><strong>🔍 Recent Account Activity:</strong></p>
+<p>You can view your complete login history and manage active sessions in your account security settings. We recommend reviewing this information regularly.</p>
+
+{% if recent_logins %}
+<div style="background-color: #f8f9fa; padding: 15px; border-radius: 6px; margin: 20px 0;">
+    <strong>Recent Logins:</strong>
+    <ul style="margin-top: 10px; margin-bottom: 0;">
+        {% for login in recent_logins %}
+        <li style="margin-bottom: 5px; font-size: 14px;">
+            {{ login.time }} - {{ login.location }} ({{ login.ip }})
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<div class="warning-box">
+    <strong>🔒 Security Reminder:</strong><br>
+    {{ app_name }} will never ask for your password via email. If you receive any suspicious emails requesting your login information, please report them to our security team immediately.
+</div>
+
+<p><strong>📞 Need Help?</strong></p>
+<p>If you have any security concerns or questions about this login:</p>
+<ul style="margin-left: 20px; margin-bottom: 20px;">
+    <li>Contact our security team at {{ support_email }}</li>
+    <li>Visit our security help center for detailed guides</li>
+    <li>Chat with our support team through the platform</li>
+</ul>
+
+<p>Your account security is our top priority. Thank you for helping us keep your account safe.</p>
+
+<p>Stay secure,<br>The {{ app_name }} Security Team</p>
+
+<div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 6px; text-align: center;">
+    <p style="margin: 0; font-size: 14px; color: #6c757d;">
+        🔐 Security Center: <a href="{{ frontend_url }}/security">{{ frontend_url }}/security</a> | 📧 Report Security Issues: {{ support_email }}
+    </p>
+</div>
+{% endblock %}

@@ -39,6 +39,13 @@ class EmailSettings(BaseModel):
     tls: bool = Field(True, description="STMP Server TLS mode")
     ssl: bool = Field(False, description="STMP Server SSL mode")
 
+class AppSettings(BaseModel):
+    """Application configuration settings."""
+    name: str = Field("AuthKit", description="Application name")
+    version: str = Field("1.0.0", description="Application version")
+    debug: bool = Field(False, description="Debug mode")
+    api_prefix: str = Field("/api/v1", description="API prefix")
+    frontend_url: str = Field("http://localhost:3000", description="Frontend URL")
 
 class Settings(BaseSettings):
     """
@@ -56,6 +63,7 @@ class Settings(BaseSettings):
 
     # Security
     secret_key: str = Field(..., env="SECRET_KEY")
+    algorithm: str = "HS256"
     access_token_expire_minutes: int = Field(30, env="ACCESS_TOKEN_EXPIRE_MINUTES")
     refresh_token_expire_days: int = Field(7, env="REFRESH_TOKEN_EXPIRE_DAYS")
 
@@ -117,7 +125,6 @@ class Settings(BaseSettings):
             api_prefix=self.api_prefix,
             frontend_url=self.frontend_url
         )
-
 
 # Global Settings Instance
 settings = Settings()

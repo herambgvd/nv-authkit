@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Account Security Alert - {{ app_name }}{% endblock %}
+
+{% block header_subtitle %}🚨 Security Alert{% endblock %}
+
+{% block content %}
+<p>We're writing to inform you about important security activity on your {{ app_name }} account.</p>
+
+<div class="warning-box">
+    <strong>⚠️ Account Security Action Required:</strong> Your account has been temporarily restricted due to suspicious activity or multiple failed login attempts.
+</div>
+
+<p>This security measure helps protect your account from unauthorized access attempts.</p>
+{% endblock %}
+
+{% block action_button %}
+<div class="button-container">
+    <a href="{{ frontend_url }}/support" class="btn btn-danger">Contact Support</a>
+</div>
+{% endblock %}
+
+{% block additional_content %}
+<p><strong>🔍 What happened?</strong></p>
+<p>Your account may have been restricted for one of the following reasons:</p>
+<ul style="margin-left: 20px; margin-bottom: 20px;">
+    <li>Multiple failed login attempts from unknown locations</li>
+    <li>Suspicious activity detected on your account</li>
+    <li>Login attempts from potentially compromised devices</li>
+    <li>Violation of our terms of service (if applicable)</li>
+</ul>
+
+<div class="info-box">
+    <strong>📞 Immediate Action Required:</strong><br>
+    To restore access to your account, please contact our support team immediately. Our security specialists will help verify your identity and restore your account access.
+</div>
+
+<p><strong>🛡️ To regain access to your account:</strong></p>
+<ol style="margin-left: 20px; margin-bottom: 20px;">
+    <li><strong>Contact Support:</strong> Reach out to our support team using the button above</li>
+    <li><strong>Verify Identity:</strong> Be prepared to provide identity verification</li>
+    <li><strong>Security Review:</strong> Our team will review your account security</li>
+    <li><strong>Account Restoration:</strong> Once verified, we'll restore your account access</li>
+    <li><strong>Security Update:</strong> Update your password and security settings</li>
+</ol>
+
+<div class="warning-box">
+    <strong>🚫 Important Security Reminders:</strong>
+    <ul style="margin-top: 10px; margin-left: 20px;">
+        <li>Never share your login credentials with anyone</li>
+        <li>Always log out from shared or public devices</li>
+        <li>Use strong, unique passwords for your account</li>
+        <li>Be cautious of phishing emails and suspicious links</li>
+        <li>Keep your contact information up to date</li>
+    </ul>
+</div>
+
+<p><strong>📧 Contact Information:</strong></p>
+<div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+    <p style="margin: 0; text-align: center;">
+        <strong>Support Email:</strong> {{ support_email }}<br>
+        <strong>Support Portal:</strong> <a href="{{ frontend_url }}/support">{{ frontend_url }}/support</a><br>
+        <strong>Response Time:</strong> Within 24 hours
+    </p>
+</div>
+
+<p><strong>🔐 After Account Restoration:</strong></p>
+<p>Once your account is restored, we recommend:</p>
+<ul style="margin-left: 20px; margin-bottom: 20px;">
+    <li>Changing your password immediately</li>
+    <li>Reviewing your account activity and settings</li>
+    <li>Enabling two-factor authentication if available</li>
+    <li>Updating your recovery email and phone number</li>
+    <li>Reviewing connected devices and applications</li>
+</ul>
+
+<div class="info-box">
+    <strong>🔒 Account Security:</strong> We take your account security seriously. These measures are in place to protect your personal information and ensure the safety of our platform.
+</div>
+
+<p>We apologize for any inconvenience this may cause. Our primary concern is keeping your account and personal information secure.</p>
+
+<p>Thank you for your understanding and cooperation.</p>
+
+<p>Best regards,<br>The {{ app_name }} Security Team</p>
+{% endblock %}

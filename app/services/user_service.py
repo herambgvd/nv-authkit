@@ -1,21 +1,24 @@
 """
 User service for business logic operations.
 """
-import uuid
 from datetime import datetime
-from typing import Optional, Dict, Any
-
-from sqlalchemy import select, func, and_, or_
+from typing import Optional, List, Dict, Any
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, func, and_, or_
+from sqlalchemy.orm import selectinload
+import uuid
 
+from app.models.user import User
+from app.models.role import Role, Permission
+from app.schemas.user import UserCreate, UserUpdate, UserAdminUpdate
+from app.core.security import security_manager
 from app.core.exceptions import (
     UserNotFoundException,
     UserAlreadyExistsException,
-    InvalidCredentialsException
+    InvalidCredentialsException,
+    EmailNotVerifiedException,
+    ValidationException
 )
-from app.core.security import security_manager
-from app.models.user import User
-from app.schemas.user import UserCreate, UserUpdate, UserAdminUpdate
 
 
 class UserService:
@@ -71,14 +74,18 @@ class UserService:
     async def get_user_by_id(self, user_id: uuid.UUID) -> Optional[User]:
         """Get user by ID."""
         result = await self.db.execute(
-            select(User).where(User.id == user_id)
+            select(User)
+            .options(selectinload(User.roles).selectinload(Role.permissions))
+            .where(User.id == user_id)
         )
         return result.scalar_one_or_none()
 
     async def get_user_by_email(self, email: str) -> Optional[User]:
         """Get user by email."""
         result = await self.db.execute(
-            select(User).where(User.email == email)
+            select(User)
+            .options(selectinload(User.roles).selectinload(Role.permissions))
+            .where(User.email == email)
         )
         return result.scalar_one_or_none()
 
@@ -172,13 +179,13 @@ class UserService:
         return True
 
     async def get_users(
-            self,
-            skip: int = 0,
-            limit: int = 100,
-            search: Optional[str] = None,
-            is_active: Optional[bool] = None,
-            is_verified: Optional[bool] = None,
-            is_superuser: Optional[bool] = None
+        self,
+        skip: int = 0,
+        limit: int = 100,
+        search: Optional[str] = None,
+        is_active: Optional[bool] = None,
+        is_verified: Optional[bool] = None,
+        is_superuser: Optional[bool] = None
     ) -> Dict[str, Any]:
         """Get users with filters and pagination."""
         query = select(User)
@@ -233,6 +240,7 @@ class UserService:
         user = await self.get_user_by_id(user_id)
         if user:
             user.last_login = datetime.utcnow()
+            user.updated_at = datetime.utcnow()
             await self.db.commit()
 
     async def change_password(self, user_id: uuid.UUID, current_password: str, new_password: str) -> bool:

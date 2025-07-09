@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Verify Your Email - {{ app_name }}{% endblock %}
+
+{% block header_subtitle %}Email Verification Required{% endblock %}
+
+{% block content %}
+<p>Welcome to {{ app_name }}! We're excited to have you on board.</p>
+
+<p>To complete your registration and start using your account, please verify your email address by clicking the button below:</p>
+
+<div class="info-box">
+    <strong>🔐 Security Notice:</strong> This verification link will expire in 24 hours for your security.
+</div>
+{% endblock %}
+
+{% block action_button %}
+<div class="button-container">
+    <a href="{{ verification_url }}" class="btn">Verify Email Address</a>
+</div>
+{% endblock %}
+
+{% block additional_content %}
+<p>If the button above doesn't work, you can copy and paste the following link into your browser:</p>
+<div class="code-box">
+    {{ verification_url }}
+</div>
+
+<div class="warning-box">
+    <strong>⚠️ Important:</strong> If you didn't create an account with {{ app_name }}, please ignore this email. Your email address will not be added to our system.
+</div>
+
+<p>Once verified, you'll be able to:</p>
+<ul style="margin-left: 20px; margin-bottom: 20px;">
+    <li>✅ Access your personalized dashboard</li>
+    <li>✅ Update your profile information</li>
+    <li>✅ Enjoy all platform features</li>
+    <li>✅ Receive important account notifications</li>
+</ul>
+
+<p>If you have any questions or need assistance, feel free to contact our support team.</p>
+
+<p>Best regards,<br>The {{ app_name }} Team</p>
+{% endblock %}

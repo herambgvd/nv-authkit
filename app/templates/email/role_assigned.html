@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}New Role Assigned - {{ app_name }}{% endblock %}
+
+{% block header_subtitle %}Account Permissions Updated{% endblock %}
+
+{% block content %}
+<p>Great news! Your account permissions have been updated on {{ app_name }}.</p>
+
+<div class="success-box">
+    <strong>🎯 New Role Assigned:</strong> You have been granted the <strong>"{{ role_name }}"</strong> role with enhanced access permissions.
+</div>
+
+<p>This role gives you access to new features and capabilities within the platform.</p>
+{% endblock %}
+
+{% block action_button %}
+<div class="button-container">
+    <a href="{{ frontend_url }}/dashboard" class="btn btn-secondary">Explore New Features</a>
+</div>
+{% endblock %}
+
+{% block additional_content %}
+<p><strong>🔑 Your New Permissions Include:</strong></p>
+<div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+    {% if permissions %}
+    <ul style="margin: 0; padding-left: 20px;">
+        {% for permission in permissions %}
+        <li style="margin-bottom: 8px;">
+            <strong>{{ permission.name }}:</strong> {{ permission.description }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p style="margin: 0; text-align: center; color: #6c757d;">
+        Please log in to view your complete list of permissions.
+    </p>
+    {% endif %}
+</div>
+
+<div class="info-box">
+    <strong>📋 Role Details:</strong><br>
+    <strong>Role Name:</strong> {{ role_name }}<br>
+    <strong>Assigned By:</strong> {{ assigned_by }}<br>
+    <strong>Date Assigned:</strong> {{ assigned_date }}<br>
+    {% if role_description %}
+    <strong>Description:</strong> {{ role_description }}
+    {% endif %}
+</div>
+
+<p><strong>🚀 What You Can Do Now:</strong></p>
+<ul style="margin-left: 20px; margin-bottom: 20px;">
+    <li>Access previously restricted features and sections</li>
+    <li>Perform new actions based on your role permissions</li>
+    <li>Collaborate with team members at your permission level</li>
+    <li>Manage resources within your assigned scope</li>
+</ul>
+
+{% if additional_roles %}
+<div class="info-box">
+    <strong>👥 Your Complete Role List:</strong><br>
+    You currently have the following roles:
+    <ul style="margin-top: 10px; margin-left: 20px;">
+        {% for role in additional_roles %}
+        <li><strong>{{ role.name }}</strong>{% if role.description %} - {{ role.description }}{% endif %}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<p><strong>🔐 Responsibility & Security:</strong></p>
+<p>With increased permissions comes increased responsibility. Please:</p>
+<ul style="margin-left: 20px; margin-bottom: 20px;">
+    <li>Use your new permissions responsibly and in accordance with our terms of service</li>
+    <li>Keep your account credentials secure</li>
+    <li>Report any suspicious activity or security concerns</li>
+    <li>Follow best practices for account security</li>
+</ul>
+
+<div class="warning-box">
+    <strong>⚠️ Important:</strong> If you believe this role assignment was made in error or if you have concerns about your new permissions, please contact our support team immediately.
+</div>
+
+<p><strong>📚 Need Help?</strong></p>
+<p>If you need assistance understanding your new role or how to use your new permissions:</p>
+<ul style="margin-left: 20px; margin-bottom: 20px;">
+    <li>Visit our help center for detailed guides</li>
+    <li>Contact our support team for personalized assistance</li>
+    <li>Check out our video tutorials and documentation</li>
+</ul>
+
+<p>We're excited to see what you'll accomplish with your new role and permissions!</p>
+
+<p>Best regards,<br>The {{ app_name }} Team</p>
+
+<div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 6px; text-align: center;">
+    <p style="margin: 0; font-size: 14px; color: #6c757d;">
+        Questions? Contact us at {{ support_email }} or visit our <a href="{{ frontend_url }}/support">Support Center</a>
+    </p>
+</div>
+{% endblock %}

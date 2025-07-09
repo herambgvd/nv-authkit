@@ -10,6 +10,7 @@ from app.core.database import get_db
 from app.dependencies.auth import get_current_user
 from app.services.role_service import RoleService
 from app.models.user import User
+from app.models.role import Role
 
 
 def require_permissions(required_permissions: List[str]):
@@ -22,10 +23,9 @@ def require_permissions(required_permissions: List[str]):
     Returns:
         Dependency function that checks user permissions
     """
-
     async def permission_checker(
-            current_user: User = Depends(get_current_user),
-            db: AsyncSession = Depends(get_db)
+        current_user: User = Depends(get_current_user),
+        db: AsyncSession = Depends(get_db)
     ) -> User:
         """Check if current user has required permissions."""
         if current_user.is_superuser:
@@ -60,10 +60,9 @@ def require_any_permission(required_permissions: List[str]):
     Returns:
         Dependency function that checks user permissions
     """
-
     async def permission_checker(
-            current_user: User = Depends(get_current_user),
-            db: AsyncSession = Depends(get_db)
+        current_user: User = Depends(get_current_user),
+        db: AsyncSession = Depends(get_db)
     ) -> User:
         """Check if current user has at least one required permission."""
         if current_user.is_superuser:
@@ -99,10 +98,9 @@ def require_roles(required_roles: List[str]):
     Returns:
         Dependency function that checks user roles
     """
-
     async def role_checker(
-            current_user: User = Depends(get_current_user),
-            db: AsyncSession = Depends(get_db)
+        current_user: User = Depends(get_current_user),
+        db: AsyncSession = Depends(get_db)
     ) -> User:
         """Check if current user has required roles."""
         if current_user.is_superuser:
@@ -136,10 +134,9 @@ def require_any_role(required_roles: List[str]):
     Returns:
         Dependency function that checks user roles
     """
-
     async def role_checker(
-            current_user: User = Depends(get_current_user),
-            db: AsyncSession = Depends(get_db)
+        current_user: User = Depends(get_current_user),
+        db: AsyncSession = Depends(get_db)
     ) -> User:
         """Check if current user has at least one required role."""
         if current_user.is_superuser:
@@ -223,9 +220,9 @@ def require_admin_or_moderator():
 
 # Custom permission checker that can be used in endpoints
 async def get_user_with_permission(
-        permission_codename: str,
-        current_user: User = Depends(get_current_user),
-        db: AsyncSession = Depends(get_db)
+    permission_codename: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
 ) -> User:
     """
     Get current user and check if they have a specific permission.
@@ -274,9 +271,9 @@ def require_microservice_permission(service_name: str, action: str):
 
 # Role hierarchy checker
 async def check_role_hierarchy(
-        target_user_id: str,
-        current_user: User = Depends(get_current_user),
-        db: AsyncSession = Depends(get_db)
+    target_user_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
 ) -> User:
     """
     Check if current user can perform actions on target user based on role hierarchy.

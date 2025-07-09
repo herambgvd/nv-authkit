@@ -230,8 +230,8 @@ class AuthService:
 
         # Check if token is still valid
         if (user.password_reset_token != token or
-                not user.password_reset_token_expires or
-                user.password_reset_token_expires < datetime.utcnow()):
+            not user.password_reset_token_expires or
+            user.password_reset_token_expires < datetime.utcnow()):
             raise InvalidTokenException("Invalid or expired reset token")
 
         # Update password
@@ -292,7 +292,13 @@ class AuthService:
         if not user_id:
             return None
 
-        user = await self.user_service.get_user_by_id(user_id)
+        # Get user without relationships for token validation
+        from sqlalchemy import select
+        result = await self.db.execute(
+            select(User).where(User.id == user_id)
+        )
+        user = result.scalar_one_or_none()
+
         if not user or not user.is_active:
             return None
 

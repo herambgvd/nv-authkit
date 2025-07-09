@@ -247,7 +247,7 @@ class BulkRoleAssignment(BaseModel):
     """Bulk role assignment schema."""
     user_ids: List[uuid.UUID] = Field(..., min_items=1, description="List of user IDs")
     role_ids: List[uuid.UUID] = Field(..., min_items=1, description="List of role IDs to assign")
-    operation: str = Field(..., regex="^(add|remove|replace)$", description="Operation type: add, remove, or replace")
+    operation: str = Field(..., pattern="^(add|remove|replace)$", description="Operation type: add, remove, or replace")
 
     class Config:
         json_schema_extra = {

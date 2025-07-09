@@ -37,8 +37,8 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
     description="Register a new user account. An email verification will be sent."
 )
 async def register(
-        user_data: RegisterRequest,
-        db: AsyncSession = Depends(get_db)
+    user_data: RegisterRequest,
+    db: AsyncSession = Depends(get_db)
 ):
     """Register a new user."""
     try:
@@ -74,8 +74,8 @@ async def register(
     description="Authenticate user and return access and refresh tokens."
 )
 async def login(
-        login_data: LoginRequest,
-        db: AsyncSession = Depends(get_db)
+    login_data: LoginRequest,
+    db: AsyncSession = Depends(get_db)
 ):
     """User login."""
     try:
@@ -93,8 +93,8 @@ async def login(
     description="Get a new access token using refresh token."
 )
 async def refresh_token(
-        refresh_data: RefreshTokenRequest,
-        db: AsyncSession = Depends(get_db)
+    refresh_data: RefreshTokenRequest,
+    db: AsyncSession = Depends(get_db)
 ):
     """Refresh access token."""
     try:
@@ -112,8 +112,8 @@ async def refresh_token(
     description="Verify user email address using verification token."
 )
 async def verify_email(
-        verification_data: EmailVerificationConfirm,
-        db: AsyncSession = Depends(get_db)
+    verification_data: EmailVerificationConfirm,
+    db: AsyncSession = Depends(get_db)
 ):
     """Verify email address."""
     try:
@@ -138,8 +138,8 @@ async def verify_email(
     description="Resend email verification to user."
 )
 async def resend_verification(
-        email_data: EmailVerificationRequest,
-        db: AsyncSession = Depends(get_db)
+    email_data: EmailVerificationRequest,
+    db: AsyncSession = Depends(get_db)
 ):
     """Resend verification email."""
     try:
@@ -157,8 +157,8 @@ async def resend_verification(
     description="Request a password reset email."
 )
 async def forgot_password(
-        reset_data: PasswordResetRequest,
-        db: AsyncSession = Depends(get_db)
+    reset_data: PasswordResetRequest,
+    db: AsyncSession = Depends(get_db)
 ):
     """Request password reset."""
     try:
@@ -176,8 +176,8 @@ async def forgot_password(
     description="Reset password using reset token."
 )
 async def reset_password(
-        reset_data: PasswordResetConfirm,
-        db: AsyncSession = Depends(get_db)
+    reset_data: PasswordResetConfirm,
+    db: AsyncSession = Depends(get_db)
 ):
     """Reset password."""
     try:
@@ -205,9 +205,9 @@ async def reset_password(
     description="Change user password (requires authentication)."
 )
 async def change_password(
-        password_data: ChangePasswordRequest,
-        current_user: User = Depends(get_current_user),
-        db: AsyncSession = Depends(get_db)
+    password_data: ChangePasswordRequest,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
 ):
     """Change password."""
     try:
@@ -236,7 +236,7 @@ async def change_password(
     description="Get current authenticated user information."
 )
 async def get_current_user_info(
-        current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """Get current user information."""
     return UserResponse(
@@ -255,5 +255,7 @@ async def get_current_user_info(
         updated_at=current_user.updated_at,
         last_login=current_user.last_login,
         full_name=current_user.full_name,
-        display_name=current_user.display_name
+        display_name=current_user.display_name,
+        roles=current_user.role_names,
+        permissions=current_user.permission_codenames
     )

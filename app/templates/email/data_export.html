@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Your Data Export is Ready - {{ app_name }}{% endblock %}
+
+{% block header_subtitle %}Data Export Complete{% endblock %}
+
+{% block content %}
+<p>Your requested data export from {{ app_name }} has been completed and is ready for download.</p>
+
+<div class="success-box">
+    <strong>✅ Export Complete:</strong> Your data has been successfully compiled and is available for download.
+</div>
+
+<p>The export contains all the personal data associated with your account, as requested.</p>
+{% endblock %}
+
+{% block action_button %}
+<div class="button-container">
+    <a href="{{ download_url }}" class="btn btn-secondary">Download My Data</a>
+</div>
+{% endblock %}
+
+{% block additional_content %}
+<div class="info-box">
+    <strong>📦 Export Details:</strong><br>
+    <strong>Request Date:</strong> {{ request_date }}<br>
+    <strong>Completion Date:</strong> {{ completion_date }}<br>
+    <strong>File Format:</strong> {{ file_format }}<br>
+    <strong>File Size:</strong> {{ file_size }}<br>
+    <strong>Expires:</strong> {{ expiry_date }}
+</div>
+
+<p><strong>📋 What's Included in Your Export:</strong></p>
+<ul style="margin-left: 20px; margin-bottom: 20px;">
+    <li>Profile information and account details</li>
+    <li>Account activity and login history</li>
+    <li>User preferences and settings</li>
+    <li>Content and data you've created or uploaded</li>
+    <li>Communication history (if applicable)</li>
+    <li>Any other personal data stored in our systems</li>
+</ul>
+
+<div class="warning-box">
+    <strong>🔒 Security Notice:</strong><br>
+    <ul style="margin-top: 10px; margin-left: 20px;">
+        <li>This download link will expire in <strong>{{ expiry_hours }} hours</strong> for security</li>
+        <li>The link is unique to your account and should not be shared</li>
+        <li>Store the downloaded file securely on your device</li>
+        <li>Delete the file when you no longer need it</li>
+    </ul>
+</div>
+
+<p><strong>📁 File Information:</strong></p>
+<div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+    <p style="margin: 0;">
+        <strong>Format:</strong> {{ file_format }}<br>
+        <strong>Structure:</strong> Data is organized by category for easy navigation<br>
+        <strong>Encoding:</strong> UTF-8 (supports all characters and languages)<br>
+        <strong>Compression:</strong> ZIP archive for efficient download
+    </p>
+</div>
+
+<p><strong>🔍 Understanding Your Data:</strong></p>
+<p>The exported data includes:</p>
+<ul style="margin-left: 20px; margin-bottom: 20px;">
+    <li><strong>Structured Data:</strong> Information stored in organized formats (JSON, CSV)</li>
+    <li><strong>Files:</strong> Any uploaded files, images, or documents</li>
+    <li><strong>Metadata:</strong> Information about when data was created or modified</li>
+    <li><strong>System Data:</strong> Technical information related to your account</li>
+</ul>
+
+<div class="info-box">
+    <strong>📞 Need Help?</strong><br>
+    If you have trouble downloading your data or questions about the export format, our support team is here to help. Contact us at {{ support_email }}.
+</div>
+
+<p><strong>🔐 Data Privacy & Security:</strong></p>
+<p>Your privacy is important to us:</p>
+<ul style="margin-left: 20px; margin-bottom: 20px;">
+    <li>This export contains only data associated with your account</li>
+    <li>Sensitive information like passwords are not included</li>
+    <li>The download link is encrypted and secure</li>
+    <li>We maintain logs of data export requests for security auditing</li>
+</ul>
+
+<div class="warning-box">
+    <strong>⏰ Important Reminder:</strong><br>
+    Your download link will expire on <strong>{{ expiry_date }}</strong>. Please download your data before this time. If you miss the deadline, you'll need to request a new export.
+</div>
+
+<p><strong>🗃️ After Downloading:</strong></p>
+<p>Once you've downloaded your data:</p>
+<ul style="margin-left: 20px; margin-bottom: 20px;">
+    <li>Store it securely on your personal device</li>
+    <li>Consider backing it up if it's important to you</li>
+    <li>Review the contents to ensure everything is included</li>
+    <li>Contact us if you notice any missing information</li>
+</ul>
+
+<p>Thank you for trusting us with your data. We're committed to transparency and giving you full control over your personal information.</p>
+
+<p>Best regards,<br>The {{ app_name }} Data Team</p>
+
+<div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 6px; text-align: center;">
+    <p style="margin: 0; font-size: 14px; color: #6c757d;">
+        Privacy Policy: <a href="{{ frontend_url }}/privacy">{{ frontend_url }}/privacy</a> | Data Questions: {{ support_email }}
+    </p>
+</div>
+{% endblock %}
