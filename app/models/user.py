@@ -1,14 +1,15 @@
 """
-User model for the AuthKit System.
+User model for the FastAPI User Management System.
 """
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 from sqlalchemy import String, Boolean, DateTime, Text, Index
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
 from app.core.database import Base
+from app.models.role import user_roles
 
 
 class User(Base):
@@ -140,6 +141,13 @@ class User(Base):
         nullable=True
     )
 
+    # Relationships
+    roles: Mapped[List["Role"]] = relationship(
+        "Role",
+        secondary=user_roles,
+        back_populates="users"
+    )
+
     # Indexes
     __table_args__ = (
         Index("idx_user_email", "email"),
@@ -172,3 +180,37 @@ class User(Base):
         if self.username:
             return self.username
         return self.full_name
+
+    @property
+    def role_names(self) -> List[str]:
+        """Get list of role names for this user."""
+        return [role.name for role in self.roles if role.is_active]
+
+    @property
+    def permission_codenames(self) -> List[str]:
+        """Get list of all permission codenames for this user."""
+        permissions = set()
+        for role in self.roles:
+            if role.is_active:
+                permissions.update(role.permission_codenames)
+        return list(permissions)
+
+    def has_permission(self, permission_codename: str) -> bool:
+        """Check if user has a specific permission."""
+        return permission_codename in self.permission_codenames
+
+    def has_role(self, role_name: str) -> bool:
+        """Check if user has a specific role."""
+        return role_name in self.role_names
+
+    def has_any_role(self, role_names: List[str]) -> bool:
+        """Check if user has any of the specified roles."""
+        user_roles = set(self.role_names)
+        required_roles = set(role_names)
+        return bool(user_roles.intersection(required_roles))
+
+    def get_highest_priority_role(self) -> Optional["Role"]:
+        """Get the role with highest priority for this user."""
+        if not self.roles:
+            return None
+        return max(self.roles, key=lambda role: role.priority if role.is_active else -1)
