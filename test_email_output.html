@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{{ app_name }}{% endblock %}</title>
+    <title>Verify Your Email - Neubit AuthKit</title>
     <style>
         /* Reset styles */
         * {
@@ -227,35 +227,68 @@
     <div class="email-container">
         <!-- Header -->
         <div class="email-header">
-            <h1>{{ app_name }}</h1>
-            <p>{% block header_subtitle %}Your trusted platform{% endblock %}</p>
+            <h1>Neubit AuthKit</h1>
+            <p>Email Verification Required</p>
         </div>
 
         <!-- Body -->
         <div class="email-body">
             <div class="greeting">
-                Hello {{ name }},
+                Hello Test User,
             </div>
 
             <div class="content">
-                {% block content %}{% endblock %}
+                
+<p>Welcome to Neubit AuthKit! We're excited to have you on board.</p>
+
+<p>To complete your registration and start using your account, please verify your email address by clicking the button below:</p>
+
+<div class="info-box">
+    <strong>🔐 Security Notice:</strong> This verification link will expire in 24 hours for your security.
+</div>
+
             </div>
 
-            {% block action_button %}{% endblock %}
+            
+<div class="button-container">
+    <a href="https://example.com/verify?token=test123" class="btn">Verify Email Address</a>
+</div>
 
-            {% block additional_content %}{% endblock %}
+
+            
+<p>If the button above doesn't work, you can copy and paste the following link into your browser:</p>
+<div class="code-box">
+    https://example.com/verify?token=test123
+</div>
+
+<div class="warning-box">
+    <strong>⚠️ Important:</strong> If you didn't create an account with Neubit AuthKit, please ignore this email. Your email address will not be added to our system.
+</div>
+
+<p>Once verified, you'll be able to:</p>
+<ul style="margin-left: 20px; margin-bottom: 20px;">
+    <li>✅ Access your personalized dashboard</li>
+    <li>✅ Update your profile information</li>
+    <li>✅ Enjoy all platform features</li>
+    <li>✅ Receive important account notifications</li>
+</ul>
+
+<p>If you have any questions or need assistance, feel free to contact our support team.</p>
+
+<p>Best regards,<br>The Neubit AuthKit Team</p>
+
         </div>
 
         <!-- Footer -->
         <div class="email-footer">
             <div class="footer-content">
-                <p><strong>{{ app_name }}</strong></p>
+                <p><strong>Neubit AuthKit</strong></p>
                 <p>This email was sent from an automated system. Please do not reply to this email.</p>
 
                 <div class="footer-links">
-                    <a href="{{ frontend_url }}">Visit Website</a> |
-                    <a href="{{ frontend_url }}/support">Support</a> |
-                    <a href="{{ frontend_url }}/privacy">Privacy Policy</a>
+                    <a href="http://localhost:3000">Visit Website</a> |
+                    <a href="http://localhost:3000/support">Support</a> |
+                    <a href="http://localhost:3000/privacy">Privacy Policy</a>
                 </div>
 
                 <div class="social-links">
@@ -266,7 +299,7 @@
                 </div>
 
                 <p style="margin-top: 20px; font-size: 12px;">
-                    © {{ current_year }} {{ app_name }}. All rights reserved.
+                    ©  Neubit AuthKit. All rights reserved.
                 </p>
             </div>
         </div>

@@ -1,6 +1,7 @@
 """
 Authentication service for handling user authentication and authorization.
 """
+import logging
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -18,6 +19,8 @@ from app.core.exceptions import (
     EmailNotVerifiedException,
     InvalidTokenException
 )
+
+logger = logging.getLogger(__name__)
 
 
 class AuthService:
@@ -60,15 +63,24 @@ class AuthService:
         await self.db.refresh(db_user)
 
         # Send verification email
+        email_sent = False
         try:
             await email_service.send_verification_email(
                 email=db_user.email,
                 name=db_user.display_name,
                 token=verification_token
             )
-        except Exception:
-            # Log error but don't fail registration
-            pass
+            email_sent = True
+            logger.info(f"Verification email sent successfully to {db_user.email}")
+        except Exception as e:
+            # Log detailed error but don't fail registration
+            logger.error(f"Failed to send verification email to {db_user.email}: {e}")
+            logger.error(f"Email service error details: {type(e).__name__}: {str(e)}")
+            # Email failure should not prevent user registration
+
+        # Add email status to user object for debugging
+        if hasattr(db_user, '__dict__'):
+            db_user.__dict__['_email_sent'] = email_sent
 
         return db_user
 
@@ -292,13 +304,7 @@ class AuthService:
         if not user_id:
             return None
 
-        # Get user without relationships for token validation
-        from sqlalchemy import select
-        result = await self.db.execute(
-            select(User).where(User.id == user_id)
-        )
-        user = result.scalar_one_or_none()
-
+        user = await self.user_service.get_user_by_id(user_id)
         if not user or not user.is_active:
             return None
 

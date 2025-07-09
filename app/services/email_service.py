@@ -237,21 +237,6 @@ class EmailService:
             template_data=template_data
         )
 
-    async def send_account_locked_email(self, email: str, name: str) -> bool:
-        """Send account locked notification email."""
-        template_data = {
-            "name": name,
-            "app_name": settings.app.name,
-            "frontend_url": settings.app.frontend_url,
-            "support_email": settings.email.from_email
-        }
-
-        return await self.send_email(
-            recipients=[email],
-            subject="Account Security Alert",
-            template_name="account_locked",
-            template_data=template_data
-        )
 
 # Global email service instance
 email_service = EmailService()
